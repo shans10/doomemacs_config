@@ -14,14 +14,6 @@
 ;; Set font family
 (setq doom-font (font-spec :family "Adwaita Mono" :size 15)) ; editor font
 
-;; Custom styles for all themes
-;; (custom-set-faces!
-  ;; '(font-lock-keyword-face :slant italic :weight medium)
-  ;; '(font-lock-comment-face :slant italic :weight normal))
-;; '(italic :slant italic :weight medium))
-;; '(tree-sitter-hl-face:property :slant italic :weight medium)
-;; '(line-number-current-line :slant italic :weight medium))
-
 ;;; WINDOW ;;;
 (add-to-list 'default-frame-alist '(fullscreen . maximized))   ; open emacs maximized
 
@@ -29,25 +21,13 @@
 (setq evil-vsplit-window-right t
       evil-split-window-below t)
 
-;; Transparency
-;; (doom/set-frame-opacity 97)   ; add transparency
-;; (set-frame-parameter nil 'alpha-background 97) ; for current frame
-;; (add-to-list 'default-frame-alist '(alpha-background . 97)) ; for all new frames henceforth
-
-;; Disable window decoration if using graphical session
-;; (if (display-graphic-p)
-;;   (setq default-frame-alist '((undecorated . t))) ; for current frame
-;;   (add-to-list 'default-frame-alist '(undecorated . t))) ; for all new frames henceforth
-;; (add-to-list 'default-frame-alist '(drag-internal-border . 1))    ; enable drag and resize for internal borders
-;; (add-to-list 'default-frame-alist '(internal-border-width . 1))   ; set internal border size
-
 ;;; VIM RELATED ;;;
 (setq evil-want-fine-undo 'fine   ; vim like undo
       evil-cross-lines t)         ; vim whichwrap
 
 ;; Scrolloff
-;; (setq scroll-step 1)
-;; (setq scroll-margin 8)
+(setq scroll-step 1)
+(setq scroll-margin 8)
 
 ;; Function to add space from both sides inside braces
 (defun my/c-mode-insert-space (arg)
@@ -131,20 +111,13 @@
    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)))
 
 ;;; MODELINE ;;;
-;; (setq doom-modeline-major-mode-icon t)            ; show major mode icon in doom modeline(filetype icon)
 (setq lsp-modeline-code-actions-enable nil       ; disable code actions in doom modeline
 	  doom-modeline-check-simple-format t)
-;; (setq doom-modeline-modal-icon nil)               ; disable mode icon and show mode text
 ;; (setq doom-modeline-indent-info t)                ; show indent level
 
 ;;; WHITESPACE MODE ;;;
 (global-whitespace-mode +1)                ; enable globally
 (setq whitespace-style '(face trailing))   ; set style
-
-;;; INDENT BARS ;;;
-;; (setq highlight-indent-guides-auto-enabled nil)   ; fix color issues in catppuccin
-;; (setq highlight-indent-guides-responsive 'top)   ; display different color for current context
-;; (setq highlight-indent-guides-method 'column)
 
 ;;; TERMINAL ;;;
 (setq shell-file-name "/bin/fish"
