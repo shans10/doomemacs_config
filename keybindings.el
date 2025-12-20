@@ -1,3 +1,5 @@
+;;; $DOOMDIR/keybindings.el -*- lexical-binding: t; -*-
+
 ;; LSP
 ; LSP show diagnostics
 (map! :leader
@@ -17,24 +19,15 @@
       :desc "Kill this buffer"
       "b D" #'kill-this-buffer)
 
-;; Neotree
+;; Dirvish
 (map! :leader
-      :desc "Neotree" "t n" #'neotree-toggle)
+      :desc "Dirvish sidebar" "t D" #'dirvish-side)
 
 ;; Terminal
-; Open external terminal in CWD
-;; (map! :leader
-;;       :desc "Open terminal here"
-;;       "t ." #'term-here)
-; Built in terminals
 (map! :leader
       :desc "Eshell popup" "t e" #'+eshell/toggle
       :desc "Vterm popup" "t t" #'+vterm/toggle)
 
-;; Zoom active window
-;; (map! :leader
-;;       (:desc "Zoom window"
-;;              "w z" #'zoom-window-zoom))
 
 ;; Dired
 ; Evil mode

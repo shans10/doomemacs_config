@@ -3,6 +3,7 @@
 ;;; UI ;;;
 (setq display-line-numbers-type 'relative)   ; set line number style
 (setq confirm-kill-emacs nil)                ; disable quit prompt
+(setq indent-tabs-mode nil)                  ; use spaces for Tab indentation
 
 ;; Custom splash image
 (setq fancy-splash-image (file-name-concat doom-user-dir "splash.png"))
@@ -12,7 +13,7 @@
 
 ;;; FONT ;;;
 ;; Set font family
-(setq doom-font (font-spec :family "Adwaita Mono" :size 15)) ; editor font
+(setq doom-font (font-spec :family "Monaspace Neon Frozen" :size 15)) ; editor font
 
 ;;; WINDOW ;;;
 (add-to-list 'default-frame-alist '(fullscreen . maximized))   ; open emacs maximized
@@ -29,34 +30,6 @@
 (setq scroll-step 1)
 (setq scroll-margin 8)
 
-;; Function to add space from both sides inside braces
-(defun my/c-mode-insert-space (arg)
-  (interactive "*P")
-  (let ((prev (char-before))
-        (next (char-after)))
-    (self-insert-command (prefix-numeric-value arg))
-    (if (and prev next
-             (string-match-p "[[({]" (string prev))
-             (string-match-p "[])}]" (string next)))
-        (save-excursion (self-insert-command 1)))))
-
-(defun my/c-mode-delete-space (arg &optional killp)
-  (interactive "*p\nP")
-  (let ((prev (char-before))
-        (next (char-after))
-        (pprev (char-before (- (point) 1))))
-    (if (and prev next pprev
-             (char-equal prev ?\s) (char-equal next ?\s)
-             (string-match "[[({]" (string pprev)))
-        (delete-char 1))
-    (backward-delete-char-untabify arg killp)))
-
-;; Add space between brackets when 'SpaceBar' is pressed
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (local-set-key " " 'my/c-mode-insert-space)
-            (local-set-key "\177" 'my/c-mode-delete-space)))
-
 ;;; EVIL SNIPE ;;;
 (setq evil-snipe-scope 'visible
       evil-snipe-repeat-scope 'whole-visible
@@ -65,10 +38,11 @@
 ;;; FLYCHECK ;;;
 ;; Check syntax on idle
 (after! flycheck
-  (setq flycheck-check-syntax-automatically '(idle-change)))
+  (setq flycheck-check-syntax-automatically '(idle-change))
+  (setq flycheck-idle-change-delay 0.5))
 
-(setq +vc-gutter-default-style nil)                    ; Disable default fringe styling
-(setq-default flycheck-indication-mode 'left-fringe)   ; Move flycheck to left margin
+;; (setq +vc-gutter-default-style nil)                    ; Disable default fringe styling
+;; (setq-default flycheck-indication-mode 'left-fringe)   ; Move flycheck to left margin
 
 ;;; LSP ;;;
 ;; Disable invasive lsp-mode features
@@ -87,33 +61,30 @@
 ;; Formatting
 (setq-hook! 'js-mode-hook +format-with-lsp nil)
 
-;;; NEOTREE ;;;
-(after! neotree
-  (setq neo-smart-open t
-        neo-window-fixed-size nil))
+;;; DIRVISH ;;;
+;; Close dirvish sidebar after file is opened
+;; Function to close dirvish after file is opened
+(defun my/dirvish-side-open-and-quit ()
+  "Open the file at point and close the dirvish-side window."
+  (interactive)
+  (let ((file (dired-get-file-for-visit)))
+    (dirvish-side) ;; This toggles the sidebar closed
+    (find-file file)))
 
-;; Function to autoclose neotree on file open
-(defun neo-open-file-hide (full-path &optional arg)
-  "Open a file node and hides tree."
-  (neo-global--select-mru-window arg)
-  (find-file full-path)
-  (neotree-hide))
-
-(defun neotree-enter-hide (&optional arg)
-  "Enters file and hides neotree directly"
-  (interactive "P")
-  (neo-buffer--execute arg 'neo-open-file-hide 'neo-open-dir))
-
-;; Close neotree when 'Enter' is pressed to open a file
-(add-hook
- 'neotree-mode-hook
- (lambda ()
-   (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter-hide)))
+;; Map the above function to 'Enter' key to close dirvish on file open
+(map! :after dirvish
+      :map dirvish-mode-map
+      :n "RET" #'my/dirvish-side-open-and-quit
+      :n [return] #'my/dirvish-side-open-and-quit)
 
 ;;; MODELINE ;;;
-(setq lsp-modeline-code-actions-enable nil       ; disable code actions in doom modeline
-	  doom-modeline-check-simple-format t)
-;; (setq doom-modeline-indent-info t)                ; show indent level
+;; Simple doom modeline flycheck format
+(after! doom-modeline
+  (setq doom-modeline-check-simple-format t))
+
+(setq lsp-modeline-code-actions-enable nil)   ; disable code actions in doom modeline
+(setq doom-modeline-indent-info t             ; show indent level
+      doom-modeline-lsp t)                    ; show lsp status
 
 ;;; WHITESPACE MODE ;;;
 (global-whitespace-mode +1)                ; enable globally

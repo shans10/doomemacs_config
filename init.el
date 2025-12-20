@@ -4,15 +4,16 @@
 
        :completion
        (corfu +dabbrev +icons)
+       ;; (corfu +dabbrev)
        (vertico +icons)
+       ;; vertico
 
        :ui
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
-       indent-guides     ; highlighted indent columns
+       ;;indent-guides     ; highlighted indent columns
        modeline          ; snazzy, Atom-inspired modeline, plus API
-       neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        (vc-gutter +pretty) ; vcs diff in the fringe
@@ -28,6 +29,7 @@
 
        :emacs
        (dired +dirvish +icons)
+       ;; (dired +dirvish)
        electric          ; smarter, keyword-based electric-indent
        ;;ibuffer           ; interactive buffer management
        tramp             ; remote files at your arthritic fingertips
@@ -44,7 +46,7 @@
 
        :tools
        ;;debugger          ; FIXME stepping through code, to help you add bugs
-       ;;direnv
+       direnv
        ;;docker
        editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
@@ -77,10 +79,10 @@
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        org               ; organize your plain life in plain text
-       (python +lsp +tree-sitter +pyright)   ; beautiful is better than ugly
+       (python +lsp)   ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       (sh +fish +lsp)     ; she sells {ba,z,fi}sh shells on the C xor
+       (sh +fish)     ; she sells {ba,z,fi}sh shells on the C xor
        ;;web               ; the tubes
        ;;yaml              ; JSON, but readable
        ;;zig               ; C, but simpler
