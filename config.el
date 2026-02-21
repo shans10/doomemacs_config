@@ -55,14 +55,13 @@
 (after! lsp-ui
   (setq lsp-ui-sideline-enable nil          ; no more useful than flycheck
         lsp-ui-doc-enable nil               ; redundant with K
-      	lsp-eldoc-enable-hover nil          ; disable doc below modeline on hover
-      	lsp-signature-auto-activate nil))   ; disable function signature help popup
+        lsp-eldoc-enable-hover nil          ; disable doc below modeline on hover
+        lsp-signature-auto-activate nil))   ; disable function signature help popup
 
 ;; Formatting
 (setq-hook! 'js-mode-hook +format-with-lsp nil)
 
 ;;; DIRVISH ;;;
-;; Close dirvish sidebar after file is opened
 ;; Function to close dirvish after file is opened
 (defun my/dirvish-side-open-and-quit ()
   "Open the file at point and close the dirvish-side window."
@@ -74,8 +73,9 @@
 ;; Map the above function to 'Enter' key to close dirvish on file open
 (map! :after dirvish
       :map dirvish-mode-map
-      :n "RET" #'my/dirvish-side-open-and-quit
-      :n [return] #'my/dirvish-side-open-and-quit)
+      ;; :n "RET" #'my/dirvish-side-open-and-quit
+      :n "<right>" #'my/dirvish-side-open-and-quit)
+      ;; :n [return] #'my/dirvish-side-open-and-quit)
 
 ;;; MODELINE ;;;
 ;; Simple doom modeline flycheck format
@@ -83,12 +83,23 @@
   (setq doom-modeline-check-simple-format t))
 
 (setq lsp-modeline-code-actions-enable nil)   ; disable code actions in doom modeline
-(setq doom-modeline-indent-info t             ; show indent level
+(setq doom-modeline-indent-info nil           ; show indent level
       doom-modeline-lsp t)                    ; show lsp status
 
 ;;; WHITESPACE MODE ;;;
 (global-whitespace-mode +1)                ; enable globally
 (setq whitespace-style '(face trailing))   ; set style
+
+;;; INDENT BARS ;;;
+;; Highlight current context with different colour
+(after! indent-bars
+   (setq indent-bars-pattern "."
+         indent-bars-width-frac 0.1
+         indent-bars-pad-frac 0.25
+         indent-bars-color-by-depth nil
+         indent-bars-display-on-blank-lines 'least
+         indent-bars-no-descend-lists t))
+         ;; indent-bars-highlight-current-depth '(:face default :blend 0.35)))
 
 ;;; TERMINAL ;;;
 (setq shell-file-name "/bin/fish"
@@ -99,6 +110,13 @@
       eshell-scroll-to-bottom-on-input t
       eshell-destroy-buffer-when-process-dies t
       eshell-visual-commands'("bash" "fish" "htop" "ssh" "top" "zsh"))
+
+;; Disable eshell completion
+(defun my-eshell-remove-pcomplete ()
+  (remove-hook 'completion-at-point-functions #'pcomplete-completions-at-point t))
+
+;; Add the function to the eshell-mode-hook to run when Eshell starts
+(add-hook 'eshell-mode-hook #'my-eshell-remove-pcomplete)
 
 ;;; LOAD USER DEFINED KEYBINDINGS ;;;
 (load! "keybindings")
